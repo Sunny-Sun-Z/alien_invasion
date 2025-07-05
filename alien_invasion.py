@@ -23,8 +23,8 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         # self.bg_color = (230, 230, 230)
         self.ship = Ship(self)
-        self.moving_right = False
-        self.moving_left = False
+        # self.moving_right = False
+        # self.moving_left = False
         
     def run_game(self):
         """Start the main loop for the game."""
@@ -33,9 +33,7 @@ class AlienInvasion:
             self._update_screen()
             # Redraw the screen during each pass through the loop.
             # self.screen.fill(self.bg_color)
-           
             self.clock.tick(60)
-           
             self.ship.update()
 
     def _check_events(self):
