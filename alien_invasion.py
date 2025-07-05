@@ -11,6 +11,11 @@ class AlienInvasion:
         
         self.clock = pygame.time.Clock()
         self.settings = Settings()
+        # set fullscreen mode and set setting screen width and height
+        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.settings.screen_width = self.screen.get_rect().width
+        # self.settings.screen_height = self.screen.get_rect().height
+        # end setting fullscreen mode
         self.screen = pygame.display.set_mode(
             # (1200, 800)
             (self.settings.screen_width, self.settings.screen_height)
@@ -41,7 +46,8 @@ class AlienInvasion:
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
-                self._check_keyup_events(event)   
+                self._check_keyup_events(event)  
+                 
     def _update_screen(self):
         
         self.screen.fill(self.settings.bg_color)
@@ -54,6 +60,8 @@ class AlienInvasion:
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
+        elif event.key == pygame.K_q:
+            sys.exit()
             
     def _check_keyup_events(self, event):
         """Respond to key presses."""
