@@ -46,8 +46,7 @@ class AlienInvasion:
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)  
                  
-    def _update_screen(self):
-        
+    def _update_screen(self):     
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
         pygame.display.flip()
