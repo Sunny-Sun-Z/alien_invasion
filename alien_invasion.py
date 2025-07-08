@@ -3,6 +3,8 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
+
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -25,6 +27,9 @@ class AlienInvasion:
         # self.bg_color = (230, 230, 230)
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+        self._create_fleet()
+        
         
     def run_game(self):
         """Start the main loop for the game."""
@@ -37,6 +42,7 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullets()
             
+            
     def _update_bullets(self):
         """Update position of bullets and get rid of old bullets."""
         # Update bullet positions.        
@@ -45,6 +51,7 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
             # print(len(self.bullets))
+
 
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -56,12 +63,15 @@ class AlienInvasion:
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)  
                  
+                 
     def _update_screen(self):     
         self.screen.fill(self.settings.bg_color)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
+        self.aliens.draw(self.screen)
         pygame.display.flip()
+
 
     def _check_keydown_events(self, event):
         """Respond to key presses."""
@@ -74,6 +84,7 @@ class AlienInvasion:
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
                 
+                
     def _check_keyup_events(self, event):
         """Respond to key presses."""
         if event.key == pygame.K_RIGHT:
@@ -83,11 +94,44 @@ class AlienInvasion:
             self.ship.moving_left = False
         # Add more movement logic here if needed.
 
+
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+            
+            
+    def _create_fleet(self):
+        """Create the fleet of aliens."""
+        # Create an alien and keep adding aliens until there's no room left.
+        # Spacing between aliens is one alien width and one alien height.
+        # Make an alien.
+        alien = Alien(self)
+        alien_width, alien_height = alien.rect.size
+        
+        self.aliens.add(alien)
+        # alien_width = alien.rect.width
+
+        # current_x = alien_width
+        current_x, current_y = alien_width, alien_height
+        while current_y < (self.settings.screen_height - 3 * alien_height):
+            while current_x < (self.settings.screen_width - 2 * alien_width):
+                self._create_alien(current_x, current_y)
+                current_x += 2 * alien_width
+                      
+             # Finished a row; reset x value, and increment y value.
+            current_x = alien_width
+            current_y += 2 * alien_height
+            
+                                  
+    def _create_alien(self, x_position, y_position):
+        """Create an alien and place it in the row."""
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.y = y_position
+        new_alien.rect.x = x_position
+        self.aliens.add(new_alien)
 
 if __name__ == '__main__':
     # Make a game instance, and run the game.
